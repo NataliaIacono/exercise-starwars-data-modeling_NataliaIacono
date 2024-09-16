@@ -16,18 +16,10 @@ class Usuario (Base):
     contrasena=Column(String, nullable=False) 
     email=Column(String, nullable=False)
     address=Column(String)
-    comprobacion_inicio=Column(Integer, ForeignKey("usuarios_contrasenas.id_usuario")) #esto lo necesito de usuarios_contrasenas, CLAVE FORANEA
+
+    relacion_favoritos = relationship("Favoritos", backref="usuario")
+
     
-
-class Usuarios_Contrasenas(Base):
-    __tablename__ = 'usuarios_contrasenas'
-    id_usuario= Column(Integer, primary_key=True)
-    nombre_usuario=Column(String)
-    contrasena=Column(String)
-    relacion_usuario=relationship("Usuario", backref="usuarios_contrasenas")
-    #Hago la relacion a Usuario para poder darle nombre_usuario y contrasena
-    relacion_favoritos=relationship("Favoritos", backref="usuarios_contrasenas")
-
 class Planetas(Base):
     __tablename__ = 'planetas'
     id_planeta= Column(Integer, primary_key=True)
@@ -51,10 +43,10 @@ class Vehiculos(Base):
 
 class Favoritos(Base):
     __tablename__ = 'favoritos'
-    id_usuario= Column(Integer, ForeignKey("usuarios_contrasenas.id_usuario"), primary_key=True) #necesito id_usuario de usuarios_contrasenas
-    id_planeta= Column(Integer, ForeignKey("planetas.id_planeta"))
-    id_personaje= Column(Integer, ForeignKey("personajes.id_personaje"))
-    id_vehiculo= Column(Integer, ForeignKey("vehiculos.id_vehiculo"))
+    id_usuario= Column(Integer, ForeignKey("usuario.id_usuario"), primary_key=True) #necesito id_usuario de usuarios
+    planeta= Column(String, ForeignKey("planetas.nombre"))
+    personaje= Column(String, ForeignKey("personajes.nombre"))
+    vehiculo= Column(String, ForeignKey("vehiculos.nombre"))
 
 
     def to_dict(self):
